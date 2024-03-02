@@ -1,0 +1,13 @@
+// app global css in SCSS form
+
+.q-menu {
+  width: 93%;
+}
+
+// body.mobile:not(.native-mobile) .q-select__dialog {
+//   height: 50vh;
+// }
+
+.q-select__dialog > .genre-list {
+  max-height: 30vh;
+}
