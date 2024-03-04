@@ -1,1 +1,84 @@
 // app global css in SCSS form
+
+.q-page-container {
+    background-color: $bgLightest;
+
+    .indexPage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+
+        .q-input {
+            width: 90%;
+            max-width: 90%;
+
+            .searchbarIcons {
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.q-toolbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: $bgDarkest;
+
+    .q-toolbar__title {
+        flex: none;
+    }
+}
+
+.q-menu {
+
+    width: 50%;
+
+    .q-item__section {
+
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .filterWrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .filterLabel {
+            width: 30%;
+        }
+
+        .filterSelect {
+            width: 70%;
+
+            .q-field__inner {
+                display: initial; /* Reset display property */
+                flex-direction: initial; /* Reset flex-direction property */
+
+                .q-field__control {
+                    flex-direction: row;
+                }
+            }
+        }
+    }
+
+    .menuIcon {
+        font-size: 2em;
+    }
+}
+
+.menu__bigger {
+    width: 80%;
+}
+
+
+
+// .q-input {
+//     background-color: white;
+
+// }
