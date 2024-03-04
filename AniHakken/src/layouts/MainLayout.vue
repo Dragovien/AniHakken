@@ -1,17 +1,17 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <Header/>
+    <AppHeader/>
     <q-page-container>
       <router-view />
     </q-page-container>
-    <Footer/>
+    <AppFooter/>
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import Header from '../components/header/Header.vue'
-import Footer from '../components/footer/Footer.vue'
+import { defineComponent } from 'vue'
+import AppHeader from '../components/header/Header.vue'
+import AppFooter from '../components/footer/Footer.vue'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -19,8 +19,8 @@ export default defineComponent({
     return {}
   },
   components: {
-    Header,
-    Footer
+    AppHeader,
+    AppFooter
   },
 
 })
