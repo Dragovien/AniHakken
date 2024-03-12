@@ -23,7 +23,7 @@ export default defineComponent({
 	methods: {
 		goToAnimeDetails(anime) {
 			// console.log(anime)
-			this.$router.push(`/anime`)
+			this.$router.push({ name: 'AnimeShow', params: { id: anime.id} });
 		}
 	},
 	created() {}

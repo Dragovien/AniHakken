@@ -5,13 +5,13 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', name: 'IndexPage', component: () => import('pages/IndexPage.vue') },
-      { 
-        path: '/anime',
-        component: () => import('layouts/AnimeLayout.vue'),
-        children: [
-          { path: ':id', name: 'AnimeShow', component: () => import('pages/AnimeDetailsPage.vue') },
-        ]
-      },
+    ]
+  },
+  {
+    path: '/anime',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: ':id', name: 'AnimeShow', component: () => import('pages/AnimeDetailsPage.vue') },
     ]
   },
 
