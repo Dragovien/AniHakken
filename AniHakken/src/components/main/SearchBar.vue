@@ -1,5 +1,5 @@
 <template>
-    <q-input v-model="search" rounded outlined bg-color="white" label="Rechercher votre animé">
+    <q-input v-model="search" rounded outlined class="searchInput" label="Rechercher votre animé">
         <template v-slot:prepend>
             <q-btn flat dense round icon="expand_circle_down" aria-label="Settings">
                 <q-menu class="menu menu__bigger" max-width="100%">

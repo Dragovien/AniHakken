@@ -1,7 +1,17 @@
 // app global css in SCSS form
 
+h1, h2, h3 {
+    text-align: center;
+    margin: 0;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
 .q-menu {
-  width: 93%;
+  width: 95%;
 }
 
 // body.mobile:not(.native-mobile) .q-select__dialog {
@@ -17,7 +27,7 @@
 .q-page-container {
     background-color: $bgLightest;
 
-    .indexPage {
+    .index-page {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -44,50 +54,15 @@
     }
 }
 
-.q-menu {
+// .menu__bigger {
+//     width: 80%;
+// }
 
-    width: 50%;
-
-    .q-item__section {
-
-        div {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+.searchbar {
+    width: 100%;
+    .q-field__control {
+        background-color: white;
     }
-
-    .filterWrapper {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        .filterLabel {
-            width: 30%;
-        }
-
-        .filterSelect {
-            width: 70%;
-
-            .q-field__inner {
-                display: initial; /* Reset display property */
-                flex-direction: initial; /* Reset flex-direction property */
-
-                .q-field__control {
-                    flex-direction: row;
-                }
-            }
-        }
-    }
-
-    .menuIcon {
-        font-size: 2em;
-    }
-}
-
-.menu__bigger {
-    width: 80%;
 }
 
 

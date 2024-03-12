@@ -4,7 +4,14 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') }
+      { path: '', name: 'IndexPage', component: () => import('pages/IndexPage.vue') },
+      { 
+        path: '/anime',
+        component: () => import('layouts/AnimeLayout.vue'),
+        children: [
+          { path: ':id', name: 'AnimeShow', component: () => import('pages/AnimeDetailsPage.vue') },
+        ]
+      },
     ]
   },
 

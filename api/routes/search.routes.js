@@ -2,8 +2,9 @@ module.exports = app => {
   const controller = require("../controllers/search.controller.js")
   var router = require("express").Router()
 
-  router.post("", controller.getAll)
-  router.post("/results", controller.searchAnime)
+  router.get("", controller.getAll)
+  router.get("/airingAnimes", controller.getAiringAnimes)
+  router.post("/search/results", controller.searchAnime)
 
-  app.use('/search', router)
+  app.use('/animes', router)
 }
