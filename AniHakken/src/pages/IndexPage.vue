@@ -213,9 +213,7 @@ export default defineComponent({
 		}
 	},
 	created() {
-		// this.getAiringAnimes()
-		// globalStore.selectedAnime = 'nex'
-		console.log(globalStore.selectedAnime)
+		this.getAiringAnimes()
 	}
 })
 </script>

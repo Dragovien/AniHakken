@@ -1,33 +1,31 @@
 <template>
   <q-page class="page">
     <section class="image-section">
-      <!-- <image :src="image" alt="selected anime image"/>  -->
+      <img :src="image" :alt="selectedAnime?.title?.romaji || 'Anime Image'"/> 
     </section>
   </q-page>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import { useGlobalStore } from 'src/stores/globalStore.js';
-const globalStore = useGlobalStore()
-
 
 export default defineComponent({
   name: 'AnimeDetailsPage',
   data () {
     return {
+      selectedAnime: null,
       image: null,
     }
   },
   created() {
-    console.log(globalStore)
-    // this.image = this.$store.selectedAnime?.coverImage.large
+    this.selectedAnime = this.$store.selectedAnime
+    if (this.selectedAnime && this.selectedAnime.coverImage && this.selectedAnime.coverImage.large) {
+      this.image = this.selectedAnime.coverImage.large
+    }
   },
-  mounted() {
-  }
 })
 </script>
 
 <style lang="scss" scoped>
-
+/* Add any necessary styles */
 </style>
