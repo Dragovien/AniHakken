@@ -9,6 +9,8 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { useGlobalStore } from 'src/stores/globalStore.js';
+const globalStore = useGlobalStore()
 
 export default defineComponent({
 	data() {
@@ -22,11 +24,12 @@ export default defineComponent({
 	},
 	methods: {
 		goToAnimeDetails(anime) {
-			// console.log(anime)
+			globalStore.selectedAnime = anime
 			this.$router.push({ name: 'AnimeShow', params: { id: anime.id} });
 		}
 	},
-	created() {}
+	created() {
+	}
 })
 </script>
 

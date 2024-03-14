@@ -2,6 +2,7 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 
+
 export default route(function (/* { store, ssrContext } */) {
   // const createHistory = process.env.SERVER
   //   ? createMemoryHistory

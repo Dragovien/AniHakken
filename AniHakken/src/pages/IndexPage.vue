@@ -74,27 +74,29 @@
 			</q-input>
 		</section>
 
-		<div v-if="list.length > 0">
-			<div v-if="userSearch" class="list">
-				<h1>Résultats de votre recherche</h1>
-				<q-virtual-scroll class="list" :items="filterAnime" v-slot="{ item, index }">
-					<q-item :key="index" class="list-item">
-						<AnimeCard :result="item" />
-					</q-item>
-				</q-virtual-scroll>
+		<section class="animes-section">
+			<div v-if="list.length > 0">
+				<div v-if="userSearch" class="list">
+					<h1>Résultats de votre recherche</h1>
+					<q-virtual-scroll class="list" :items="filterAnime" v-slot="{ item, index }">
+						<q-item :key="index" class="list-item">
+							<AnimeCard :result="item" />
+						</q-item>
+					</q-virtual-scroll>
+				</div>
+				<div v-else>
+					<h1>Animés en cours de parution</h1>
+					<q-virtual-scroll class="list" :items="filterAnime" v-slot="{ item, index }">
+						<q-item :key="index" class="list-item">
+							<AnimeCard :result="item" />
+						</q-item>
+					</q-virtual-scroll>
+				</div>
 			</div>
-			<div v-else>
-				<h1>Animés en cours de parution</h1>
-				<q-virtual-scroll class="list" :items="filterAnime" v-slot="{ item, index }">
-					<q-item :key="index" class="list-item">
-						<AnimeCard :result="item" />
-					</q-item>
-				</q-virtual-scroll>
+			<div v-else class="no-result">
+				<p>Aucun résultat</p>
 			</div>
-		</div>
-		<div v-else class="no-result">
-			<p>Aucun résultat</p>
-		</div>
+		</section>
 	</q-page>
 </template>
 
@@ -102,6 +104,8 @@
 import { defineComponent } from 'vue'
 import searchService from '../services/search.service.js'
 import AnimeCard from '../components/main/AnimeCard.vue'
+import { useGlobalStore } from 'src/stores/globalStore.js'
+const globalStore = useGlobalStore()
 
 export default defineComponent({
 	name: 'IndexPage',
@@ -180,7 +184,7 @@ export default defineComponent({
 						(!this.genre.length || this.genre.every((genre) => anime.genres.includes(genre))) &&
 						(!this.year || anime.seasonYear === this.year) &&
 						(!this.score || anime.averageScore >= this.score) &&
-						(!anime.genres.includes('Hentai')) && 
+						!anime.genres.includes('Hentai') &&
 						(!this.text || anime.title.romaji.toLowerCase().includes(this.text.toLowerCase()))
 					)
 				})
@@ -209,7 +213,9 @@ export default defineComponent({
 		}
 	},
 	created() {
-		this.getAiringAnimes()
+		// this.getAiringAnimes()
+		// globalStore.selectedAnime = 'nex'
+		console.log(globalStore.selectedAnime)
 	}
 })
 </script>
