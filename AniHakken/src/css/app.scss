@@ -8,6 +8,14 @@ h1, h2, h3 {
 h1 {
     font-size: 1.5rem;
     font-weight: 500;
+    line-height: 1;
+}
+
+.generic-button {
+    background-color: $bgDarkest;
+    color: white;
+    border-radius: $mediumBorderRadius;
+    font-size: 0.75rem;
 }
 
 .q-menu {

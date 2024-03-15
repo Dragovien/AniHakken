@@ -48,7 +48,7 @@ export default defineComponent({
 
 .title-section {
 	height: 20%;
-	background-color: $titleBg;
+	background-color: $bgRed;
 	color: $titleColor;
 	text-align: center;
 	white-space: nowrap;
