@@ -1,6 +1,6 @@
 <template>
 	<q-card class="anime-card" @click="goToAnimeDetails(result)">
-		<img :src="result.coverImage.extraLarge" alt="Anime cover image" class="cover-image" />
+		<img :src="result.coverImage.large" alt="Anime cover image" class="cover-image" />
 		<q-card-section class="title-section">
 			{{ result.title.romaji }}
 		</q-card-section>
@@ -36,13 +36,16 @@ export default defineComponent({
 <style lang="scss" scoped>
 .anime-card {
 	height: 25vh;
-	border-radius: $mediumBorderRadius;
+	max-height: 25vh;
 	width: 100%;
+	max-width: 100%;
+	border-radius: $mediumBorderRadius;
 	cursor: pointer;
 }
 
 .cover-image {
 	width: 100%;
+	max-width: 100%;
 	height: 80%;
 }
 

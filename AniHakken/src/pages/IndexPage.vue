@@ -75,7 +75,7 @@
 		</section>
 
 		<section class="animes-section">
-			<div v-if="list.length > 0">
+			<div v-if="list.length > 0" class="">
 				<div v-if="userSearch" class="list">
 					<h1>Résultats de votre recherche</h1>
 					<q-virtual-scroll class="list" :items="filterAnime" v-slot="{ item, index }">
@@ -84,7 +84,7 @@
 						</q-item>
 					</q-virtual-scroll>
 				</div>
-				<div v-else>
+				<div v-else class="list">
 					<h1>Animés en cours de parution</h1>
 					<q-virtual-scroll class="list" :items="filterAnime" v-slot="{ item, index }">
 						<q-item :key="index" class="list-item">
@@ -94,7 +94,7 @@
 				</div>
 			</div>
 			<div v-else class="no-result">
-				<p>Aucun résultat</p>
+				<h1>Aucun résultat</h1>
 			</div>
 		</section>
 	</q-page>
@@ -225,10 +225,10 @@ export default defineComponent({
 	align-items: center;
 }
 
-.list {
-	width: 95%;
+.list,
+.no-result {
 	max-height: 60vh;
-	margin: 0 auto 1rem;
+	width: 100%;
 	padding: 1rem;
 }
 
@@ -241,9 +241,16 @@ export default defineComponent({
 	column-gap: 1rem;
 }
 
+.animes-section {
+	max-width: 100%;
+}
+
 .list-item {
 	width: 47%;
+	max-width: 47%;
 	padding: 0;
+	display: flex;
+	justify-content: center;
 }
 
 .filter-item {
@@ -255,10 +262,6 @@ export default defineComponent({
 .item-section {
 	flex: 1;
 	max-width: 70%;
-}
-
-.cover-image {
-	max-width: 100%;
 }
 
 .no-result {
