@@ -1,23 +1,39 @@
 <template>
 	<q-header elevated>
 		<q-toolbar>
-			<q-btn flat dense round icon="menu" aria-label="Menu" />
-			<q-toolbar-title> AniHakken </q-toolbar-title>
-			<q-btn flat dense round icon="settings" aria-label="Settings">
+			<q-toolbar-title class="app-title"> AniHakken </q-toolbar-title>
+			<q-btn flat dense round icon="menu" aria-label="Settings">
 				<q-menu class="header-menu" max-width="50%">
 					<q-item>
 						<q-item-section class="cursor-pointer">
+							<div>
+								<q-icon name="login" class="menu-icon" />
+								<p>Se connecter</p>
+							</div>
+						</q-item-section>
+						<q-item-section class="cursor-pointer">
+							<div>
+								<q-icon name="app_registration" class="menu-icon" />
+								<p>S'inscrire</p>
+							</div>
+						</q-item-section>
+					</q-item>
+
+					<!-- TODO: rajouter redirect et display icone si logged ou pas -->
+
+					<q-item>
+						<q-item-section class="cursor-pointer" @click="$router.push('/')">
 							<div>
 								<q-icon name="home" class="menu-icon" />
 								<p>Accueil</p>
 							</div>
 						</q-item-section>
-						<q-item-section class="cursor-pointer">
+						<!-- <q-item-section class="cursor-pointer">
 							<div>
 								<q-icon name="search" class="menu-icon" />
 								<p>Chercher</p>
 							</div>
-						</q-item-section>
+						</q-item-section> -->
 					</q-item>
 					<q-item>
 						<q-item-section class="cursor-pointer">
@@ -48,6 +64,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.app-title {
+		margin-inline: auto;
+	}
+
 .header-menu {
 	width: 50%;
 

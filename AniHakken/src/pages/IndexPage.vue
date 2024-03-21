@@ -229,7 +229,7 @@ export default defineComponent({
 .no-result {
 	max-height: 60vh;
 	width: 100%;
-	padding: 1rem;
+	padding: 1em;
 }
 
 :deep(.q-virtual-scroll__content) {
@@ -237,8 +237,8 @@ export default defineComponent({
 	justify-content: space-between;
 	flex-wrap: wrap;
 	overflow-y: auto;
-	row-gap: 1rem;
-	column-gap: 1rem;
+	row-gap: 1em;
+	column-gap: 1em;
 }
 
 .animes-section {
@@ -274,10 +274,10 @@ export default defineComponent({
 .filter-section {
 	display: flex;
 	justify-content: space-between;
-	margin-top: 1rem;
+	margin-top: 1em;
 	align-items: center;
 	width: 95%;
-	column-gap: 1rem;
+	column-gap: 1em;
 }
 
 .filter-btn {
@@ -286,6 +286,6 @@ export default defineComponent({
 }
 
 :deep(.q-menu .filter-menu) {
-	margin-top: 1rem;
+	margin-top: 1em;
 }
 </style>

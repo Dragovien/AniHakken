@@ -53,9 +53,7 @@ exports.getAiringAnimeQuery = (req, res) => {
             }
             bannerImage
             genres
-            synonyms
             averageScore
-            meanScore
             popularity
             favourites
           }
@@ -73,6 +71,41 @@ exports.getAiringAnimeQuery = (req, res) => {
 
   return { url, options }
 }
+
+//info dispos
+
+// tags {
+//   id
+//   name
+//   description
+//   category
+//   rank
+//   isGeneralSpoiler
+//   isMediaSpoiler
+//   isAdult
+// }
+
+// stats {
+//   scoreDistribution {
+//     score
+//     amount
+//   }
+//   statusDistribution {
+//     status
+//     amount
+//   }
+
+// }
+// rankings {
+//   rank
+//   type
+//   format
+//   year
+//   season
+//   allTime
+//   context
+// }
+
 
 exports.searchAnimeQuery = (req, res) => {
   var query = `
@@ -118,9 +151,7 @@ exports.searchAnimeQuery = (req, res) => {
             }
             bannerImage
             genres
-            synonyms
             averageScore
-            meanScore
             popularity
             favourites
           }
@@ -136,5 +167,5 @@ exports.searchAnimeQuery = (req, res) => {
 
   options.body = JSON.stringify({ query, variables })
 
-    return { url, options }
+  return { url, options }
 }

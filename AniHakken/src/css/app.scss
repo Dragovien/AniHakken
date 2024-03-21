@@ -8,19 +8,27 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 1.5rem;
+    font-size: 2em;
     
 }
 
 h2 {
-    font-size: 1.3rem;
+    font-size: 1.5em;
 }
+
+/**
+ * Remove margins on p element.
+ */
+
+ p {
+  margin: 0
+ }
 
 .generic-button {
     background-color: $bgDarkest;
     color: white;
     border-radius: $mediumBorderRadius;
-    font-size: 0.75rem;
+    font-size: 0.75em;
 }
 
 .q-menu {
@@ -44,7 +52,7 @@ h2 {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 1rem;
+        padding: 1em;
 
         .q-input {
             width: 90%;
@@ -71,7 +79,7 @@ h2 {
 //     width: 80%;
 // }
 
-.searchbar {
+.searchbar, .comment-input {
     width: 100%;
     .q-field__control {
         background-color: white;
