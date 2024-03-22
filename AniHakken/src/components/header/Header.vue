@@ -5,7 +5,7 @@
 			<q-btn flat dense round icon="menu" aria-label="Settings">
 				<q-menu class="header-menu" max-width="50%">
 					<q-item>
-						<q-item-section class="cursor-pointer">
+						<q-item-section class="cursor-pointer" @click="$router.push({name:'LoginPage'})">
 							<div>
 								<q-icon name="login" class="menu-icon" />
 								<p>Se connecter</p>
@@ -35,7 +35,7 @@
 							</div>
 						</q-item-section> -->
 					</q-item>
-					<q-item>
+					<q-item v-if="isLogged">
 						<q-item-section class="cursor-pointer">
 							<div>
 								<q-icon name="contact_support" class="menu-icon" />
@@ -59,7 +59,12 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-	name: 'AppHeader'
+	name: 'AppHeader',
+	data() {
+		return {
+			isLogged: false
+		}
+	}
 })
 </script>
 
