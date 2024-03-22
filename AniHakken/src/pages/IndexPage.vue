@@ -74,6 +74,8 @@
 			</q-input>
 		</section>
 
+		<!-- TODO: add loading for list retrieval and only display Aucun résultat after loading -->
+
 		<section class="animes-section">
 			<div v-if="list.length > 0" class="">
 				<div v-if="userSearch" class="list">
@@ -287,5 +289,26 @@ export default defineComponent({
 
 :deep(.q-menu .filter-menu) {
 	margin-top: 1em;
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1200px) {
+}
+
+@media only screen and (min-width: 1201px) {
+
+	.list-item {
+	width: 10%;
+	max-width: 10%;
+}
+
+:deep(.q-virtual-scroll__content) {
+	justify-content: flex-start;
+}
 }
 </style>
