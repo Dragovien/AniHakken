@@ -1,11 +1,11 @@
-let url = 'https://graphql.anilist.co'
+let url = "https://graphql.anilist.co"
 let options = {
-  method: 'POST',
+  method: "POST",
   headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
-  body: null
+  body: null,
 }
 
 exports.getAiringAnimeQuery = (req, res) => {
@@ -13,6 +13,13 @@ exports.getAiringAnimeQuery = (req, res) => {
   var query = `
       query ($id: Int, $page: Int, $perPage: Int, $status: MediaStatus) {
         Page (page: $page, perPage: $perPage) {
+          pageInfo {
+      total
+      currentPage
+      lastPage
+      hasNextPage
+      perPage
+    }
           media (id: $id, type: ANIME, status: $status) {
             id
             title {
@@ -62,14 +69,14 @@ exports.getAiringAnimeQuery = (req, res) => {
       `
 
   let variables = {
-    page: 1,
-    perPage: 100,
-    status: 'RELEASING'
+    // page: 3,
+    // perPage: 50,
+    status: "RELEASING",
   }
 
-  options.body = JSON.stringify({ query, variables })
+  options.body = JSON.stringify({query, variables})
 
-  return { url, options }
+  return {url, options}
 }
 
 //info dispos
@@ -105,7 +112,6 @@ exports.getAiringAnimeQuery = (req, res) => {
 //   allTime
 //   context
 // }
-
 
 exports.searchAnimeQuery = (req, res) => {
   var query = `
@@ -162,10 +168,10 @@ exports.searchAnimeQuery = (req, res) => {
   let variables = {
     search: req.body.text,
     page: 1,
-    perPage: 100
+    perPage: 100,
   }
 
-  options.body = JSON.stringify({ query, variables })
+  options.body = JSON.stringify({query, variables})
 
-  return { url, options }
+  return {url, options}
 }

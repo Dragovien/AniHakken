@@ -35,6 +35,12 @@ h2 {
   width: 95%;
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 // body.mobile:not(.native-mobile) .q-select__dialog {
 //   height: 50vh;
 // }
