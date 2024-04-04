@@ -10,14 +10,19 @@ class SearchService {
     return response
   }
 
-  async getAiringAnimes() {
-    const response = await api.get('animes/airingAnimes')
+  async getAiringAnimes(pageNumber, perPage) {
+    const response = await api.post('animes/airingAnimes', {
+      pageNumber,
+      perPage
+    })
     return response
   }
 
-  async searchAnime(text) {
+  async searchAnime(text, pageNumber, perPage) {
     const response = await api.post('animes/search/results', {
-        text
+      text,
+      pageNumber,
+      perPage
     })
     return response
   }

@@ -119,7 +119,7 @@
         <template v-slot:append>
           <q-icon
             name="search"
-            @click="searchAnime(text)"
+            @click="searchAnime(text, pageNumber, perPage)"
             class="cursor-pointer"
           ></q-icon>
         </template>
@@ -149,6 +149,7 @@
         </div>
         <div v-else class="list">
           <h1>Animés en cours de parution</h1>
+          <!-- comprendre pourquoi au changement de page je vois un scroll vide puis après élargissement avec anime cards -->
           <q-virtual-scroll
             class="list list--margin-top"
             :items="filtering ? filterAnime : list"
@@ -164,6 +165,18 @@
         <q-spinner color="primary" size="3em" :thickness="10" v-if="loading" />
         <h1 v-else class="no-result-text">Aucun résultat</h1>
       </div>
+    </section>
+
+    <section class="pagination-section" v-if="!loading">
+      <q-btn @click="changePage('previous')" v-if="pageInfo.currentPage > 1">
+        <q-icon name="chevron_left"></q-icon>
+      </q-btn>
+
+      <p >Résultats  {{ 1 + pageInfo.perPage * (pageInfo.currentPage - 1) }} - {{ pageInfo.hasNextPage ? pageInfo.perPage * pageInfo.currentPage : pageInfo.total }}</p>
+
+      <q-btn @click="changePage('next')" v-if="pageInfo.hasNextPage">
+        <q-icon name="chevron_right"></q-icon>
+      </q-btn>
     </section>
   </q-page>
 </template>
@@ -224,6 +237,9 @@ export default defineComponent({
       userSearch: false,
       filtering: false,
       loading: false,
+      pageInfo: null,
+      pageNumber: 1,
+      perPage: 50,
     };
   },
   computed: {
@@ -271,22 +287,24 @@ export default defineComponent({
     },
   },
   methods: {
-    async searchAnime(text) {
-      let response = await searchService.searchAnime(text);
+    async searchAnime(text, pageNumber, perPage) {
+      let response = await searchService.searchAnime(text, pageNumber, perPage);
 
       if (response.status === 200) {
+        this.pageInfo = response.data.pageInfo;
         this.list = response.data.media;
         this.userSearch = true;
         this.airingStatus = null;
       }
     },
 
-    async getAiringAnimes() {
+    async getAiringAnimes(pageNumber, perPage) {
       this.loading = true;
-      let response = await searchService.getAiringAnimes();
+      let response = await searchService.getAiringAnimes(pageNumber, perPage);
 
       if (response.status === 200) {
         this.list = response.data.media;
+        this.pageInfo = response.data.pageInfo;
         this.airingStatus = "RELEASING";
         this.loading = false;
       }
@@ -307,9 +325,24 @@ export default defineComponent({
       this.userSearch = false;
       this.filtering = false;
     },
+
+    changePage(position) {
+      if (position === "next") {
+        if(this.pageNumber !== this.pageInfo.lastPage) this.pageNumber++;
+      } else {
+        if(this.pageNumber !== 0 ) this.pageNumber--;
+      }
+
+      this.list = [];
+      if (this.userSearch) {
+        this.searchAnime(this.text, this.pageNumber, this.perPage);
+      } else {
+        this.getAiringAnimes(this.pageNumber, this.perPage);
+      }
+    }
   },
   created() {
-    this.getAiringAnimes();
+    this.getAiringAnimes(this.pageNumber, this.perPage);
   },
 });
 </script>
@@ -397,6 +430,14 @@ export default defineComponent({
 	column-gap: 1em;
 	width: 100%;
 	margin-top: 1em;
+}
+
+.pagination-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 1em;
+  margin-bottom: 1em;
 }
 
 @media only screen and (min-width: 481px) and (max-width: 768px) {

@@ -3,7 +3,7 @@ module.exports = app => {
   var router = require("express").Router()
 
   router.get("", controller.getAll)
-  router.get("/airingAnimes", controller.getAiringAnimes)
+  router.post("/airingAnimes", controller.getAiringAnimes)
   router.post("/search/results", controller.searchAnime)
 
   app.use('/animes', router)

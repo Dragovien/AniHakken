@@ -9,18 +9,17 @@ let options = {
 }
 
 exports.getAiringAnimeQuery = (req, res) => {
-  // réussir à récuperer que airing animés
   var query = `
       query ($id: Int, $page: Int, $perPage: Int, $status: MediaStatus) {
         Page (page: $page, perPage: $perPage) {
           pageInfo {
-      total
-      currentPage
-      lastPage
-      hasNextPage
-      perPage
-    }
-          media (id: $id, type: ANIME, status: $status) {
+          total
+          currentPage
+          lastPage
+          hasNextPage
+          perPage
+        }
+          media (id: $id, type: ANIME, status: $status, isAdult: false) {
             id
             title {
               romaji
@@ -69,8 +68,8 @@ exports.getAiringAnimeQuery = (req, res) => {
       `
 
   let variables = {
-    // page: 3,
-    // perPage: 50,
+    page: req.body.pageNumber,
+    perPage: req.body.perPage,
     status: "RELEASING",
   }
 
@@ -117,7 +116,7 @@ exports.searchAnimeQuery = (req, res) => {
   var query = `
       query ($id: Int, $page: Int, $perPage: Int, $search: String) {
         Page (page: $page, perPage: $perPage) {
-          media (id: $id, search: $search, type: ANIME) {
+          media (id: $id, search: $search, type: ANIME, isAdult: false) {
             id
             title {
               romaji
@@ -167,8 +166,8 @@ exports.searchAnimeQuery = (req, res) => {
 
   let variables = {
     search: req.body.text,
-    page: 1,
-    perPage: 100,
+    page: req.body.pageNumber,
+    perPage: req.body.perPage,
   }
 
   options.body = JSON.stringify({query, variables})

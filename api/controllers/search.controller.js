@@ -15,8 +15,6 @@ exports.getAiringAnimes = async (req, res) => {
     let response = await fetch(url, options)
     let results = await response.json()
 
-    console.log(results.data)
-
     return res.status(200).send(results.data.Page)
 
   } catch (error) {
@@ -31,7 +29,6 @@ exports.searchAnime = async (req, res) => {
     let response = await fetch(url, options)
     let results = await response.json()
 
-    console.log(results.data)
     return res.status(200).send(results.data.Page)
 
   } catch (error) {
