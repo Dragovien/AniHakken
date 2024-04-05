@@ -93,7 +93,7 @@
             </q-item>
           </q-list>
 
-					<!-- TODO: gérer autrement le filtering (uniquement au clic bouton, garder par contre le filtre pour avoid hentai), rajouter pagination -->
+          <!-- TODO: gérer autrement le filtering (uniquement au clic bouton, garder par contre le filtre pour avoid hentai), rajouter pagination -->
 
           <div class="filter-btn-wrapper">
             <q-btn
@@ -101,11 +101,7 @@
               label="Réinitialiser"
               @click="reinitializeFilters"
             />
-            <q-btn
-              class="filter-btn"
-              label="Filtrer"
-              @click="applyFilters"
-            />
+            <q-btn class="filter-btn" label="Filtrer" @click="applyFilters" />
           </div>
         </q-menu>
       </q-btn>
@@ -131,10 +127,10 @@
       :class="list.length === 0 ? 'animes-section--loading' : ''"
     >
       <div v-if="list.length > 0" class="">
-        <div v-if="userSearch" class="list">
+        <div v-if="userSearch" class="userSearch">
           <h1>Résultats de votre recherche</h1>
           <q-virtual-scroll
-            class="list"
+            class="list list--margin-top"
             :items="filtering ? filterAnime : list"
             v-slot="{ item, index }"
           >
@@ -143,13 +139,15 @@
             </q-item>
           </q-virtual-scroll>
 
-          <q-inner-loading :showing="visible">
-            <q-spinner-gears size="50px" color="primary" />
-          </q-inner-loading>
+          <!-- <q-spinner
+            color="primary"
+            size="3em"
+            :thickness="10"
+            v-if="loading"
+          /> -->
         </div>
-        <div v-else class="list">
+        <div v-else class="airingAnimes">
           <h1>Animés en cours de parution</h1>
-          <!-- comprendre pourquoi au changement de page je vois un scroll vide puis après élargissement avec anime cards -->
           <q-virtual-scroll
             class="list list--margin-top"
             :items="filtering ? filterAnime : list"
@@ -167,14 +165,23 @@
       </div>
     </section>
 
+    
+
     <section class="pagination-section" v-if="!loading">
-      <q-btn @click="changePage('previous')" v-if="pageInfo.currentPage > 1">
+      <q-btn @click="changePage('previous')" v-if="pageInfo?.currentPage > 1">
         <q-icon name="chevron_left"></q-icon>
       </q-btn>
 
-      <p >Résultats  {{ 1 + pageInfo.perPage * (pageInfo.currentPage - 1) }} - {{ pageInfo.hasNextPage ? pageInfo.perPage * pageInfo.currentPage : pageInfo.total }}</p>
+      <p>
+        Résultats {{ 1 + pageInfo?.perPage * (pageInfo?.currentPage - 1) }} -
+        {{
+          pageInfo?.hasNextPage
+            ? pageInfo?.perPage * pageInfo?.currentPage
+            : pageInfo?.total
+        }}
+      </p>
 
-      <q-btn @click="changePage('next')" v-if="pageInfo.hasNextPage">
+      <q-btn @click="changePage('next')" v-if="pageInfo?.hasNextPage">
         <q-icon name="chevron_right"></q-icon>
       </q-btn>
     </section>
@@ -233,13 +240,14 @@ export default defineComponent({
       ],
       year: null,
       score: null,
-			showMenu: false,
+      showMenu: false,
       userSearch: false,
       filtering: false,
       loading: false,
       pageInfo: null,
       pageNumber: 1,
       perPage: 50,
+      lastPage: 0,
     };
   },
   computed: {
@@ -285,16 +293,25 @@ export default defineComponent({
         .sort((a, b) => a.title.romaji.localeCompare(b.title.romaji));
       return list;
     },
+
+    currentPageInStore() {
+      return this.$store.pages[this.pageNumber - 1]},
+    previousPageInStore() {
+      return this.$store.pages[this.pageNumber - 2]}
   },
   methods: {
     async searchAnime(text, pageNumber, perPage) {
+      this.loading = true;
       let response = await searchService.searchAnime(text, pageNumber, perPage);
 
       if (response.status === 200) {
         this.pageInfo = response.data.pageInfo;
         this.list = response.data.media;
+        if(this.$store.pages.length > 0) this.$store.pages = [];
+        this.$store.pages.push(response.data.media);
         this.userSearch = true;
         this.airingStatus = null;
+        this.loading = false;
       }
     },
 
@@ -304,16 +321,21 @@ export default defineComponent({
 
       if (response.status === 200) {
         this.list = response.data.media;
+        if(this.$store.pages.length === 0 || pageNumber > this.$store.pages.length) this.$store.pages.push({
+          pageInfo: {currentPage: response.data.pageInfo. currentPage, hasNextPage: response.data.pageInfo.hasNextPage},
+          media: response.data.media
+        });
+        console.log(this.$store.pages);
         this.pageInfo = response.data.pageInfo;
         this.airingStatus = "RELEASING";
         this.loading = false;
       }
     },
 
-		applyFilters() {
-			this.filtering = true;
-			this.showMenu = false;
-		},
+    applyFilters() {
+      this.filtering = true;
+      this.showMenu = false;
+    },
 
     reinitializeFilters() {
       this.airingStatus = null;
@@ -328,20 +350,29 @@ export default defineComponent({
 
     changePage(position) {
       if (position === "next") {
-        if(this.pageNumber !== this.pageInfo.lastPage) this.pageNumber++;
+        if(this.currentPageInStore && this.currentPageInStore.pageInfo.hasNextPage) {
+          this.pageNumber++;
+        }
       } else {
-        if(this.pageNumber !== 0 ) this.pageNumber--;
+        console.log(this.previousPageInStore);
+        if (this.previousPageInStore) this.pageNumber--;
       }
 
       this.list = [];
       if (this.userSearch) {
         this.searchAnime(this.text, this.pageNumber, this.perPage);
       } else {
-        this.getAiringAnimes(this.pageNumber, this.perPage);
+        // let savedPage = this.$store.pages[this.pageNumber - 1];
+        // if(savedPage) {
+        //   this.list = savedPage;
+        // } else {
+          this.getAiringAnimes(this.pageNumber, this.perPage);
+        // }
       }
-    }
+    },
   },
   created() {
+    // this.$store.pages = [];
     this.getAiringAnimes(this.pageNumber, this.perPage);
   },
 });
@@ -425,11 +456,11 @@ export default defineComponent({
 }
 
 .filter-btn-wrapper {
-	display: flex;
-	justify-content: center;
-	column-gap: 1em;
-	width: 100%;
-	margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  column-gap: 1em;
+  width: 100%;
+  margin-top: 1em;
 }
 
 .pagination-section {
@@ -438,6 +469,10 @@ export default defineComponent({
   align-items: center;
   column-gap: 1em;
   margin-bottom: 1em;
+}
+
+.airingAnimes, .userSearch {
+  margin-top: 1em;
 }
 
 @media only screen and (min-width: 481px) and (max-width: 768px) {

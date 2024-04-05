@@ -116,6 +116,13 @@ exports.searchAnimeQuery = (req, res) => {
   var query = `
       query ($id: Int, $page: Int, $perPage: Int, $search: String) {
         Page (page: $page, perPage: $perPage) {
+          pageInfo {
+            total
+            currentPage
+            lastPage
+            hasNextPage
+            perPage
+          }
           media (id: $id, search: $search, type: ANIME, isAdult: false) {
             id
             title {
