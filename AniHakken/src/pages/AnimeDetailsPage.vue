@@ -1,5 +1,10 @@
 <template>
   <q-page class="page">
+  <section class="return-section">
+    <q-btn no-caps icon="chevron_left" label="Retour à la liste d'animés" @click="$router.push({name: 'IndexPage'})"></q-btn>
+  </section>
+    
+
     <section class="image-section">
       <img
         :src="image"
@@ -217,11 +222,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+
+  .return-section,
+  .image-section,
+  .details-section,
+  .comment-section {
+    width: 100%;
+    padding: 1em;
+  }
+
 .image-section {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 1em;
   max-height: 20vh;
 
   .anime-image {
@@ -235,8 +248,9 @@ export default defineComponent({
   }
 }
 
-.details-section {
-  margin: 1em;
+.return-section {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .button-section {
@@ -261,6 +275,7 @@ export default defineComponent({
 }
 
 .details-tab-panel {
+  padding: 0;
 }
 
 .tab-insert {

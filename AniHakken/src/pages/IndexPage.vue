@@ -138,13 +138,6 @@
               <AnimeCard :result="item" />
             </q-item>
           </q-virtual-scroll>
-
-          <!-- <q-spinner
-            color="primary"
-            size="3em"
-            :thickness="10"
-            v-if="loading"
-          /> -->
         </div>
         <div v-else class="airingAnimes">
           <h1>Animés en cours de parution</h1>
@@ -165,23 +158,25 @@
       </div>
     </section>
 
-    
-
     <section class="pagination-section" v-if="!loading">
-      <q-btn @click="changePage('previous')" v-if="pageInfo?.currentPage > 1">
+      <q-btn @click="changePage('previous')" v-if="previousPageInStore">
         <q-icon name="chevron_left"></q-icon>
       </q-btn>
 
-      <p>
-        Résultats {{ 1 + pageInfo?.perPage * (pageInfo?.currentPage - 1) }} -
+      <p v-if="currentPageInStore?.pageInfo?.currentPage">
+        Résultats
+        {{ 1 + perPage * (currentPageInStore.pageInfo.currentPage - 1) }} -
         {{
-          pageInfo?.hasNextPage
-            ? pageInfo?.perPage * pageInfo?.currentPage
-            : pageInfo?.total
+          currentPageInStore.pageInfo.hasNextPage
+            ? perPage * currentPageInStore.pageInfo.currentPage
+            : currentPageInStore.pageInfo.total
         }}
       </p>
 
-      <q-btn @click="changePage('next')" v-if="pageInfo?.hasNextPage">
+      <q-btn
+        @click="changePage('next')"
+        v-if="currentPageInStore?.pageInfo?.hasNextPage"
+      >
         <q-icon name="chevron_right"></q-icon>
       </q-btn>
     </section>
@@ -248,6 +243,8 @@ export default defineComponent({
       pageNumber: 1,
       perPage: 50,
       lastPage: 0,
+      previousSearch: null,
+      previousPageNumber: null,
     };
   },
   computed: {
@@ -283,7 +280,6 @@ export default defineComponent({
               this.genre.every((genre) => anime.genres.includes(genre))) &&
             (!this.year || anime.seasonYear === this.year) &&
             (!this.score || anime.averageScore >= this.score) &&
-            !anime.genres.includes("Hentai") &&
             (!this.text ||
               anime.title.romaji
                 .toLowerCase()
@@ -295,20 +291,43 @@ export default defineComponent({
     },
 
     currentPageInStore() {
-      return this.$store.pages[this.pageNumber - 1]},
+      return this.$store.pages[this.pageNumber - 1];
+    },
     previousPageInStore() {
-      return this.$store.pages[this.pageNumber - 2]}
+      return this.$store.pages[this.pageNumber - 2];
+    },
   },
   methods: {
     async searchAnime(text, pageNumber, perPage) {
       this.loading = true;
+
+      // case: user search is different from previous search
+      if (text !== this.previousSearch) {
+        this.$store.pages = [];
+        this.previousSearch = text;
+        this.previousPageNumber = pageNumber;
+      } 
+      // case: user search is the same as previous search and page number is same as previous page number
+      else if(pageNumber === this.previousPageNumber) {
+        this.loading = false;
+        return
+      }
+
       let response = await searchService.searchAnime(text, pageNumber, perPage);
 
       if (response.status === 200) {
         this.pageInfo = response.data.pageInfo;
         this.list = response.data.media;
-        if(this.$store.pages.length > 0) this.$store.pages = [];
-        this.$store.pages.push(response.data.media);
+        this.$store.pages.push({
+          pageInfo: {
+            currentPage: response.data.pageInfo.currentPage,
+            hasNextPage: response.data.pageInfo.hasNextPage,
+            total: !response.data.pageInfo.hasNextPage
+              ? response.data.pageInfo.total
+              : null,
+          },
+          media: response.data.media,
+        });
         this.userSearch = true;
         this.airingStatus = null;
         this.loading = false;
@@ -321,10 +340,20 @@ export default defineComponent({
 
       if (response.status === 200) {
         this.list = response.data.media;
-        if(this.$store.pages.length === 0 || pageNumber > this.$store.pages.length) this.$store.pages.push({
-          pageInfo: {currentPage: response.data.pageInfo. currentPage, hasNextPage: response.data.pageInfo.hasNextPage},
-          media: response.data.media
-        });
+        if (
+          this.$store.pages.length === 0 ||
+          pageNumber > this.$store.pages.length
+        )
+          this.$store.pages.push({
+            pageInfo: {
+              currentPage: response.data.pageInfo.currentPage,
+              hasNextPage: response.data.pageInfo.hasNextPage,
+              total: !response.data.pageInfo.hasNextPage
+                ? response.data.pageInfo.total
+                : null,
+            },
+            media: response.data.media,
+          });
         console.log(this.$store.pages);
         this.pageInfo = response.data.pageInfo;
         this.airingStatus = "RELEASING";
@@ -350,29 +379,34 @@ export default defineComponent({
 
     changePage(position) {
       if (position === "next") {
-        if(this.currentPageInStore && this.currentPageInStore.pageInfo.hasNextPage) {
+        if (
+          this.currentPageInStore &&
+          this.currentPageInStore.pageInfo.hasNextPage
+        ) {
           this.pageNumber++;
         }
       } else {
-        console.log(this.previousPageInStore);
         if (this.previousPageInStore) this.pageNumber--;
       }
 
       this.list = [];
-      if (this.userSearch) {
-        this.searchAnime(this.text, this.pageNumber, this.perPage);
+      let savedPage = this.$store.pages.find(
+        (page) => page.pageInfo.currentPage === this.pageNumber
+      );
+
+      if (savedPage) {
+        this.list = savedPage.media;
       } else {
-        // let savedPage = this.$store.pages[this.pageNumber - 1];
-        // if(savedPage) {
-        //   this.list = savedPage;
-        // } else {
+        if (this.userSearch) {
+          this.searchAnime(this.text, this.pageNumber, this.perPage);
+        } else {
           this.getAiringAnimes(this.pageNumber, this.perPage);
-        // }
+        }
       }
     },
   },
   created() {
-    // this.$store.pages = [];
+    this.$store.pages = [];
     this.getAiringAnimes(this.pageNumber, this.perPage);
   },
 });
@@ -471,7 +505,8 @@ export default defineComponent({
   margin-bottom: 1em;
 }
 
-.airingAnimes, .userSearch {
+.airingAnimes,
+.userSearch {
   margin-top: 1em;
 }
 
