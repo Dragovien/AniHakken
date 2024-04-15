@@ -39,13 +39,15 @@
                 <q-select
                   v-model="genre"
                   label="Genres"
-                  :options="genreOptions"
+                  :options="filteredGenreOptions"
+                  use-input
                   multiple
                   emit-value
                   map-options
                   class="genre-select"
                   popup-content-class="genre-list"
                   @update:model-value="filterAnime"
+                  @filter="(val, update, abort) => filterFn(val, update, abort, 'genres')"
                 >
                 </q-select>
               </q-item-section>
@@ -71,9 +73,11 @@
               <q-item-section class="item-section">
                 <q-select
                   v-model.number="year"
-                  :options="yearOptions"
+                  :options="filteredYearOptions"
                   label="Année"
                   @update:model-value="filterAnime"
+                  use-input
+                  @filter="(val, update, abort) => filterFn(val, update, abort, 'year')"
                 >
                 </q-select>
               </q-item-section>
@@ -84,16 +88,18 @@
               <q-item-section class="item-section">
                 <q-select
                   v-model.number="score"
-                  :options="scoreOptions"
+                  :options="filteredScoreOptions"
                   label="Score"
                   @update:model-value="filterAnime"
+                  use-input
+                  @filter="(val, update, abort) => filterFn(val, update, abort, 'score')"
                 >
                 </q-select>
               </q-item-section>
             </q-item>
           </q-list>
 
-          <!-- TODO: gérer autrement le filtering (uniquement au clic bouton, garder par contre le filtre pour avoid hentai), rajouter pagination -->
+          <!-- TODO: gérer autrement le filtering (uniquement au clic bouton) -->
 
           <div class="filter-btn-wrapper">
             <q-btn
@@ -225,6 +231,9 @@ export default defineComponent({
         { label: "Supernaturel", value: "Supernaturel" },
         { label: "Thriller", value: "Thriller" },
       ],
+      filteredGenreOptions: [],
+      filteredYearOptions: [],
+      filteredScoreOptions: [],
       genre: [],
       season: null,
       seasonOptions: [
@@ -306,11 +315,11 @@ export default defineComponent({
         this.$store.pages = [];
         this.previousSearch = text;
         this.previousPageNumber = pageNumber;
-      } 
+      }
       // case: user search is the same as previous search and page number is same as previous page number
-      else if(pageNumber === this.previousPageNumber) {
+      else if (pageNumber === this.previousPageNumber) {
         this.loading = false;
-        return
+        return;
       }
 
       let response = await searchService.searchAnime(text, pageNumber, perPage);
@@ -404,10 +413,43 @@ export default defineComponent({
         }
       }
     },
+
+    filterFn(val, update, abort, type) {
+      update(() => {
+        const needle = val.toLowerCase()
+        switch(type) {
+          case 'genres':
+            this.filteredGenreOptions = this.genreOptions.filter((v) => {
+              return (
+                v.label.toLowerCase().indexOf(needle) > -1
+              );
+            });
+            break;
+          case 'year':
+            this.filteredYearOptions = this.yearOptions.filter((v) => {
+              return (
+                v.toString().indexOf(needle) > -1
+              );
+            });
+            break;
+          case 'score':
+            this.filteredScoreOptions = this.scoreOptions.filter((v) => {
+              return (
+                v.toString().indexOf(needle) > -1
+              );
+            });
+            break;
+        }
+        
+      })
+    },
   },
   created() {
     this.$store.pages = [];
     this.getAiringAnimes(this.pageNumber, this.perPage);
+    this.filteredGenreOptions = this.genreOptions;
+    this.filteredYearOptions = this.yearOptions;
+    this.filteredScoreOptions = this.scoreOptions;
   },
 });
 </script>
@@ -415,7 +457,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .list,
 .no-result {
-  max-height: 60vh;
+  max-height: 68vh;
   width: 100%;
   padding: 1em;
 }
