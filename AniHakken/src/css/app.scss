@@ -1,34 +1,35 @@
 // app global css in SCSS form
 
-h1, h2, h3 {
-    text-align: center;
-    margin: 0;
-    line-height: 1;
-    font-weight: 500;
+h1,
+h2,
+h3 {
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  font-weight: 500;
 }
 
 h1 {
-    font-size: 2em;
-    
+  font-size: 2em;
 }
 
 h2 {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 /**
  * Remove margins on p element.
  */
 
- p {
-  margin: 0
- }
+p {
+  margin: 0;
+}
 
 .generic-button {
-    background-color: $bgDarkest;
-    color: white;
-    border-radius: $mediumBorderRadius;
-    font-size: 0.75em;
+  background-color: $bgDarkest;
+  color: white;
+  border-radius: $mediumBorderRadius;
+  font-size: 0.75em;
 }
 
 .q-menu {
@@ -52,47 +53,61 @@ h2 {
 // app global css in SCSS form
 
 .q-page-container {
-    background-color: $bgLightest;
+  background-color: $bgLightest;
+  max-height: 100%;
+//   height: 100vh;
 
-    .index-page {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 1em;
+  .index-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
 
-        .q-input {
-            width: 90%;
-            max-width: 90%;
+    .q-input {
+      width: 90%;
+      max-width: 90%;
 
-            .searchbarIcons {
-                cursor: pointer;
-            }
-        }
+      .searchbarIcons {
+        cursor: pointer;
+      }
     }
+  }
 }
 
 .q-toolbar {
-    display: flex;
-    justify-content: space-between;
-    background-color: $bgDarkest;
+  display: flex;
+  justify-content: space-between;
+  background-color: $bgDarkest;
 
-    .q-toolbar__title {
-        flex: none;
-    }
+  .q-toolbar__title {
+    flex: none;
+  }
 }
 
 // .menu__bigger {
 //     width: 80%;
 // }
 
-.searchbar, .comment-input {
-    width: 100%;
-    .q-field__control {
-        background-color: white;
-    }
+.searchbar,
+.comment-input {
+  width: 100%;
+  .q-field__control {
+    background-color: white;
+  }
 }
 
+#scene-container {
+  /* tell our scene container to take up the full page */
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 100px);
 
+  /*
+    Set the container's background color to the same as the scene's
+    background to prevent flashing on load
+  */
+  background-color: skyblue;
+}
 
 // .q-input {
 //     background-color: white;

@@ -2,7 +2,7 @@
   <q-page class="page">
     <section class="filter-section">
       <q-btn no-caps flat class="filter-btn" label="Filtrer">
-        <q-menu model="showMenu" class="filter-menu">
+        <q-menu ref="menu" class="filter-menu">
           <q-list>
             <!-- <q-item class="filter-item">
                 <q-item-label class="item-label">
@@ -244,7 +244,6 @@ export default defineComponent({
       ],
       year: null,
       score: null,
-      showMenu: false,
       userSearch: false,
       filtering: false,
       loading: false,
@@ -280,7 +279,8 @@ export default defineComponent({
     },
 
     filterAnime() {
-      const list = this.list
+      if(this.filtering) {
+        const list = this.list
         .filter((anime) => {
           return (
             (!this.airingStatus || anime.status === this.airingStatus) &&
@@ -297,6 +297,9 @@ export default defineComponent({
         })
         .sort((a, b) => a.title.romaji.localeCompare(b.title.romaji));
       return list;
+      } else {
+        return this.list;
+      }
     },
 
     currentPageInStore() {
@@ -372,7 +375,7 @@ export default defineComponent({
 
     applyFilters() {
       this.filtering = true;
-      this.showMenu = false;
+      this.$refs.menu.hide();
     },
 
     reinitializeFilters() {
@@ -414,6 +417,7 @@ export default defineComponent({
       }
     },
 
+    // voir si passage en utils
     filterFn(val, update, abort, type) {
       update(() => {
         const needle = val.toLowerCase()
@@ -536,7 +540,7 @@ export default defineComponent({
   justify-content: center;
   column-gap: 1em;
   width: 100%;
-  margin-top: 1em;
+  margin: 1em;
 }
 
 .pagination-section {

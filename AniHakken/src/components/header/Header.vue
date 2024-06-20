@@ -17,6 +17,13 @@
 								<p>S'inscrire</p>
 							</div>
 						</q-item-section>
+						<q-item-section class="cursor-pointer" @click="$router.push({name:'ThreeJSPage'})">
+							<div>
+								<q-icon name="three" class="menu-icon" />
+								<q-icon name="cruelty_free" class="menu-icon" />
+								<p>Three JS</p>
+							</div>
+						</q-item-section>
 					</q-item>
 
 					<!-- TODO: rajouter redirect et display icone si logged ou pas -->

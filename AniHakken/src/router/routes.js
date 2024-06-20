@@ -10,6 +10,11 @@ const routes = [
         component: () => import("pages/IndexPage.vue"),
       },
       {
+        path: "threeJS",
+        name: "ThreeJSPage",
+        component: () => import("pages/ThreeJSPage.vue"),
+      },
+      {
         path: "login",
         name: "LoginPage",
         component: () => import("pages/LoginPage.vue"),
