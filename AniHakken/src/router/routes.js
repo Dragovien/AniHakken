@@ -15,6 +15,11 @@ const routes = [
         component: () => import("pages/ThreeJSPage.vue"),
       },
       {
+        path: "troisJS",
+        name: "TroisJSPage",
+        component: () => import("pages/TroisJSPage.vue"),
+      },
+      {
         path: "login",
         name: "LoginPage",
         component: () => import("pages/LoginPage.vue"),

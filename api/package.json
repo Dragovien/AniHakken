@@ -17,6 +17,7 @@
     "nodemailer": "^6.9.1",
     "papaparse": "^5.4.1",
     "sequelize": "^6.28.0",
+    "three": "^0.134.0",
     "v8n": "^1.5.1"
   },
   "devDependencies": {

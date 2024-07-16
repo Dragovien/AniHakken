@@ -1,7 +1,8 @@
 import { createCamera } from "src/threeJS/components/camera"
 import { createScene } from "src/threeJS/components/scene"
-import { createCube } from "src/threeJS/components/cube"
+// import { createCube } from "src/threeJS/components/cube"
 import { createLight, createLights } from "src/threeJS/components/lights"
+import { createMeshGroup } from "src/threeJS/components/meshGroup"
 import { createControls } from "src/threeJS/systems/controls";
 
 
@@ -25,18 +26,23 @@ class World {
 
     const controls = createControls(camera, renderer.domElement);
 
-    const cube = createCube();
+    // const cube = createCube();
     const { ambientLight, mainLight } = createLights();
+    const meshGroup = createMeshGroup();
 
 
-    controls.addEventListener("change", () => {
-      this.render();
-    });
+    // controls.addEventListener("change", () => {
+    //   this.render();
+    // });
 
 
-    loop.updatables.push(controls);
+    // loop.updatables.push(controls);
 
-    scene.add(ambientLight, mainLight, cube);
+    // scene.add(ambientLight, mainLight, cube);
+
+    loop.updatables.push(controls, meshGroup);
+
+    scene.add(ambientLight, mainLight, meshGroup);
 
     const resizer = new Resizer(container, camera, renderer);
   }
